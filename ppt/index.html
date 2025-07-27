@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git & GitHub: A Developer's Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0D1117;
+            color: #c9d1d9;
+        }
+        .slide {
+            display: none;
+            min-height: 100vh;
+            scroll-snap-align: start;
+        }
+        .slide.active {
+            display: flex;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 2rem;
+        }
+        .title-slide h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #58a6ff;
+        }
+        .title-slide h2 {
+            font-size: 1.5rem;
+            color: #8b949e;
+        }
+        h2.slide-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #58a6ff;
+            border-bottom: 2px solid #30363d;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        .content {
+            font-size: 1.125rem;
+            line-height: 1.75;
+        }
+        .content ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .content li {
+            position: relative;
+            padding-left: 1.75rem;
+            margin-bottom: 1rem;
+        }
+        .content li::before {
+            content: "\f105";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: #58a6ff;
+        }
+        .code-block {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-top: 1.5rem;
+        }
+        .code-block code {
+            color: #c9d1d9;
+        }
+        .nav-buttons {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+        .nav-button {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-button:hover {
+            background-color: #58a6ff;
+            color: #0D1117;
+        }
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background-color: #58a6ff;
+            width: 0%;
+            transition: width 0.3s ease-in-out;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+        .card h3 {
+            color: #58a6ff;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #58a6ff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Slide 1: Title -->
+    <div id="slide-1" class="slide active flex-col justify-center items-center text-center title-slide">
+        <div class="container">
+            <h1>Git & GitHub</h1>
+            <h2>A Developer's Guide to Version Control</h2>
+            <p class="mt-8 text-lg text-gray-400">Press the right arrow key or use the navigation buttons to proceed</p>
+        </div>
+    </div>
+
+    <!-- Slide 2: What is Version Control? -->
+    <div id="slide-2" class="slide flex-col justify-center">
+        <div class="container">
+            <h2 class="slide-title">What is Version Control?</h2>
+            <div class="content">
+                <p>A Version Control System (VCS) is a tool that helps a software team manage changes to source code over time.</p>
+                <br>
+                <ul>
+                    <li><strong>Track Changes:</strong> See who made what changes and when.</li>
+                    <li><strong>Revert to Previous Versions:</strong> Easily undo mistakes or go back to a stable state.</li>
+                    <li><strong>Collaborate:</strong> Allows multiple developers to work on the same project simultaneously without overwriting each other's work.</li>
+                    <li><strong>Branching and Merging:</strong> Work on new features in isolation (branches) and then combine them back into the main project (merge).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: What is Git? -->
+    <div id="slide-3" class="slide flex-col justify-center">
+        <div class="container">
+            <h2 class="slide-title">What is Git?</h2>
+            <div class="content">
+                <p>Git is a <strong>Distributed Version Control System (DVCS)</strong>. This means that every developer has a full copy of the project history on their local machine.</p>
+                <div class="grid-2 mt-8">
+                    <div class="card text-center">
+                        <i class="fas fa-bolt icon"></i>
+                        <h3>Fast</h3>
+                        <p>Most operations are performed locally, making it incredibly fast.</p>
+                    </div>
+                    <div class="card text-center">
+                        <i class="fas fa-code-branch icon"></i>
+                        <h3>Branching</h3>
+                        <p>Git's branching model is lightweight and powerful, encouraging feature-based workflows.</p>
+                    </div>
+                    <div class="card text-center">
+                        <i class="fas fa-globe icon"></i>
+                        <h3>Distributed</h3>
+                        <p>No single point of failure. You can work offline and sync changes later.</p>
+                    </div>
+                    <div class="card text-center">
+                        <i class="fas fa-shield-alt icon"></i>
+                        <h3>Secure</h3>
+                        <p>All changes are cryptographically hashed (SHA-1), ensuring data integrity.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 4: The Three States of Git -->
+    <div id="slide-4" class="slide flex-col justify-center">
+        <div class="container">
+            <h2 class="slide-title">The Three States of Git</h2>
+            <div class="content text-center">
+                <p>Your files can be in one of three main states:</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+                    <div class="card">
+                        <h3 class="text-xl font-semibold mb-2">1. Working Directory</h3>
+                        <p>The single checkout of one version of the project. These files are pulled out of the compressed database in the Git directory and placed on disk for you to use or modify.</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-xl font-semibold mb-2">2. Staging Area (Index)</h3>
+                        <p>A file in your Git directory that stores information about what will go into your next commit. You add snapshots of your modified files to the staging area.</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-xl font-semibold mb-2">3. Git Directory (.git)</h3>
+                        <p>Where Git stores the metadata and object database for your project. This is the most important part of Git, and it is what is copied when you clone a repository.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Basic Git Commands -->
+    <div id="slide-5" class="slide flex-col justify-center">
+        <div class="container">
+            <h2 class="slide-title">Core Git Commands</h2>
+            <div class="content">
+                <div class="code-block">
+                    <code>
+<span class="text-green-400"># Initialize a new Git repository in the current directory</span>
+$ git init
+
+<span class="text-green-400"># Add a file to the staging area</span>
+$ git add &lt;file_name&gt;
+
+<span class="text-green-400"># Add all modified files to the staging area</span>
+$ git add .
+
+<span class="text-green-400"># Commit the staged changes with a message</span>
+$ git commit -m "Your descriptive commit message"
+
+<span class="text-green-400"># Check the status of your working directory and staging area</span>
+$ git status
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 6: More Git Commands -->
+    <div id="slide-6" class="slide flex-col justify-center">
+        <div class="container">
+            <h2 class="slide-title">Working with Remotes</h2>
+            <div class="content">
+                 <div class="code-block">
+                    <code>
+<span class="text-green-400"># Clone (download) a repository that exists on GitHub</span>
+$ git clone &lt;repository_url&gt;
+
+<span class="text-green-400"># Add a remote repository (e.g., from GitHub)</span>
+$ git remote add origin &lt;repository_url&gt;
+
+<span class="text-green-400"># Push your committed changes to a remote repository</span>
+$ git push origin &lt;branch_name&gt;
+
+<span class="text-green-400"># Pull changes from a remote repository</span>
+$ git pull origin &lt;branch_name&gt;
+
+<span class="text-green-400"># See the history of commits</span>
+$ git log
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: What is GitHub? -->
+    <div id="slide-7" class="slide flex-col justify-center">
+        <div class="container">
+            <h2 class="slide-title">What is GitHub?</h2>
+            <div class="content grid-2 items-center">
+                <div>
+                    <p>GitHub is a web-based platform that provides hosting for software development and version control using Git. It's like a "cloud for your code."</p>
+                    <br>
+                    <ul>
+                        <li><strong>Remote Repositories:</strong> A central place to store and manage your Git repositories.</li>
+                        <li><strong>Collaboration Tools:</strong> Features designed to make teamwork seamless.</li>
+                        <li><strong>Project Management:</strong> Tools to track issues, plan features, and manage your project's lifecycle.</li>
+                        <li><strong>Automation:</strong> GitHub Actions allows you to automate your build, test, and deployment pipeline.</li>
+                    </ul>
+                </div>
+                <div class="text-center">
+                    <i class="fab fa-github icon" style="font-size: 10rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: GitHub Core Features -->
+    <div id="slide-8" class="slide flex-col justify-center">
+        <div class="container">
+            <h2 class="slide-title">GitHub's Key Features</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3 class="flex items-center gap-2"><i class="fas fa-code-pull-request"></i> Pull Requests</h3>
+                    <p>Propose changes to a repository. They let you tell others about changes you've pushed to a branch and request their feedback before merging into the main branch.</p>
+                </div>
+                <div class="card">
+                    <h3 class="flex items-center gap-2"><i class="fas fa-comments"></i> Code Review</h3>
+                    <p>Discuss proposed changes directly in the pull request. You can comment on specific lines of code, suggest improvements, and approve changes.</p>
+                </div>
+                <div class="card">
+                    <h3 class="flex items-center gap-2"><i class="fas fa-dot-circle"></i> Issues</h3>
+                    <p>Track bugs, enhancements, and other tasks. Issues are a great way to keep track of tasks, enhancements, and bugs for your projects.</p>
+                </div>
+                 <div class="card">
+                    <h3 class="flex items-center gap-2"><i class="fas fa-cogs"></i> Actions</h3>
+                    <p>Automate your workflow. Build, test, and deploy your code right from GitHub. Make code reviews, branch management, and issue triaging work the way you want.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Collaborative Workflow -->
+    <div id="slide-9" class="slide flex-col justify-center">
+        <div class="container">
+            <h2 class="slide-title">A Typical GitHub Workflow</h2>
+            <div class="content">
+                <ol class="relative border-l border-gray-700">                  
+                    <li class="mb-10 ml-6">            
+                        <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-900 rounded-full -left-3 ring-8 ring-gray-900">1</span>
+                        <h3 class="font-semibold">Create a Branch</h3>
+                        <p>Create a new branch from `main` to work on a new feature or bug fix.</p>
+                        <code class="text-sm text-gray-400">git checkout -b new-feature</code>
+                    </li>
+                    <li class="mb-10 ml-6">
+                        <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-900 rounded-full -left-3 ring-8 ring-gray-900">2</span>
+                        <h3 class="font-semibold">Add Commits</h3>
+                        <p>Make your changes, add them to staging, and commit them with clear messages.</p>
+                        <code class="text-sm text-gray-400">git add . && git commit -m "Implement new feature"</code>
+                    </li>
+                    <li class="mb-10 ml-6">
+                        <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-900 rounded-full -left-3 ring-8 ring-gray-900">3</span>
+                        <h3 class="font-semibold">Open a Pull Request</h3>
+                        <p>Push your branch to GitHub and open a Pull Request (PR) to the `main` branch.</p>
+                        <code class="text-sm text-gray-400">git push origin new-feature</code>
+                    </li>
+                    <li class="mb-10 ml-6">
+                        <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-900 rounded-full -left-3 ring-8 ring-gray-900">4</span>
+                        <h3 class="font-semibold">Discuss and Review</h3>
+                        <p>Team members review your code, leave comments, and suggest changes.</p>
+                    </li>
+                    <li class="ml-6">
+                        <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-900 rounded-full -left-3 ring-8 ring-gray-900">5</span>
+                        <h3 class="font-semibold">Merge</h3>
+                        <p>Once approved, merge the Pull Request into the `main` branch. Your changes are now part of the main codebase!</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Conclusion -->
+    <div id="slide-10" class="slide flex-col justify-center items-center text-center">
+        <div class="container">
+            <h2 class="slide-title">Thank You!</h2>
+            <div class="content">
+                <p class="text-2xl">Git and GitHub are essential tools for modern software development.</p>
+                <p class="mt-4 text-lg text-gray-400">Mastering them will significantly improve your workflow, collaboration, and code quality.</p>
+                <p class="mt-8 text-xl font-bold text-blue-400">Questions?</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Navigation -->
+    <div class="nav-buttons">
+        <button id="prevBtn" class="nav-button"><i class="fas fa-arrow-left"></i> Prev</button>
+        <button id="nextBtn" class="nav-button">Next <i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressBar = document.getElementById('progressBar');
+        let currentSlide = 0;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[n].classList.add('active');
+            updateNavButtons();
+            updateProgressBar();
+        }
+
+        function updateNavButtons() {
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+        }
+        
+        function updateProgressBar() {
+            const progress = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        showSlide(currentSlide);
+    </script>
+
+</body>
+</html>
